@@ -13,10 +13,12 @@ jobs:
     name: 'Build GraphViz static ${{ matrix.platform }}'
     strategy:
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, ARM64 ]
         include:
           - os: 'ubuntu-latest'
             platform: 'linux-amd64'
+          - os: 'ARM64'
+            platform: 'linux-arm64'
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@v3
