@@ -1,0 +1,35 @@
+name: Static binary On-Demand
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+
+run-name: GraphViz static  ${{ inputs.tag }} by @${{ github.actor }}
+
+jobs:
+  native_images:
+    name: 'Build GraphViz static ${{ matrix.platform }}'
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        include:
+          - os: 'ubuntu-latest'
+            platform: 'linux-amd64'
+    runs-on: ${{matrix.os}}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - run: |
+          docker build -t kroki-graphviz-static --build-arg GRAPHVIZ_VERSION=${{ inputs.tag }} -f static.Dockerfile .
+          docker create --name=kroki-graphviz-static-latest kroki-graphviz-static:latest
+          docker cp kroki-graphviz-static-latest:./graphviz-src/cmd/dot/dot_static dot-${{matrix.platform}}
+      - name: Create release
+        run: |
+          gh release view "$RELEASE_VERSION" || gh release create "$RELEASE_VERSION"
+          gh release upload $RELEASE_VERSION './dot-${{matrix.platform}}#dot static (${{matrix.platform}})' --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ github.event.inputs.tag }}
