@@ -52,8 +52,9 @@ RUN wget https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-re
       --with-x && \
     make && make install \
 
-RUN graphviz-src/cmd/dot/dot_static --version && \
-    echo "digraph G {Hello->World}" | graphviz-src/cmd/dot/dot_static -Tpng > hello.png && \
-    echo "digraph G {Hello->World}" | graphviz-src/cmd/dot/dot_static -jpeg > hello.jpeg && \
-    echo "digraph G {Hello->World}" | graphviz-src/cmd/dot/dot_static -Tsvg > hello.svg && \
-    echo "digraph G {Hello->World}" | graphviz-src/cmd/dot/dot_static -Tpdf > hello.pdf
+RUN chmod +x ./graphviz-src/cmd/dot/dot_static && \
+    ./graphviz-src/cmd/dot/dot_static --version && \
+    echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -Tpng > hello.png && \
+    echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -jpeg > hello.jpeg && \
+    echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -Tsvg > hello.svg && \
+    echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -Tpdf > hello.pdf
