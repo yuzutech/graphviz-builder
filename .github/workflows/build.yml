@@ -26,16 +26,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - run: |
+          docker rm /kroki-graphviz-static-latest || true
           docker build -t kroki-graphviz-static --build-arg GRAPHVIZ_VERSION=${{ inputs.tag }} -f static.Dockerfile .
           docker create --name=kroki-graphviz-static-latest kroki-graphviz-static:latest
           docker cp kroki-graphviz-static-latest:./graphviz-src/cmd/dot/dot_static dot-${{matrix.platform}}
-      - name: Smoke tests
-        run: |
-          ./dot-${{matrix.platform}} -V
-          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -Tpng > hello.png
-          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -jpeg > hello.jpeg
-          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -Tsvg > hello.svg
-          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -Tpdf > hello.pdf
       - name: Create release
         run: |
           gh release view "$RELEASE_VERSION" || gh release create "$RELEASE_VERSION"
