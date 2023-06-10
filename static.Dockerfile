@@ -3,7 +3,16 @@ FROM eclipse-temurin:11.0.18_10-jre-jammy
 ARG GRAPHVIZ_VERSION=8.0.4
 
 RUN apt-get update && apt-get install --no-install-recommends --yes \
+    libx11-6 \
+    libxmu6 \
+    libxt6 \
+    liblab-gamut1 \
+    fonts-liberation \
+    libpango1.0-dev \
+    libpangocairo-1.0-0 \
+    libcairo2-dev \
     libcairo2 \
+    libglib2.0-0 \
     libgd-dev \
     zlib1g-dev \
     libpangoft2-1.0-0 \
@@ -14,6 +23,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     giflib-tools \
     fonts-freefont-ttf \
     fonts-noto-cjk \
+    gsfonts \
     ghostscript
 
 RUN wget https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/${GRAPHVIZ_VERSION}/graphviz-${GRAPHVIZ_VERSION}.tar.gz -O graphviz.tar.gz && \
@@ -50,11 +60,11 @@ RUN wget https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-re
       --with-pangocairo=yes \
       --with-rsvg=yes \
       --with-x && \
-    make && make install \
+    make && make install
 
 RUN chmod +x ./graphviz-src/cmd/dot/dot_static && \
     ./graphviz-src/cmd/dot/dot_static --version && \
     echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -Tpng > hello.png && \
-    echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -jpeg > hello.jpeg && \
+    echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -Tjpeg > hello.jpeg && \
     echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -Tsvg > hello.svg && \
     echo "digraph G {Hello->World}" | ./graphviz-src/cmd/dot/dot_static -Tpdf > hello.pdf
