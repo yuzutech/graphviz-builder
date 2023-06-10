@@ -3,6 +3,7 @@ FROM eclipse-temurin:11.0.18_10-jre-jammy
 ARG GRAPHVIZ_VERSION=8.0.4
 
 RUN apt-get update && apt-get install --no-install-recommends --yes \
+    cairo \
     libgd-dev \
     zlib1g-dev \
     libpangoft2-1.0-0 \

@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
+        description: 'Tag'
         required: true
 
 run-name: GraphViz static  ${{ inputs.tag }} by @${{ github.actor }}
@@ -28,6 +29,13 @@ jobs:
           docker build -t kroki-graphviz-static --build-arg GRAPHVIZ_VERSION=${{ inputs.tag }} -f static.Dockerfile .
           docker create --name=kroki-graphviz-static-latest kroki-graphviz-static:latest
           docker cp kroki-graphviz-static-latest:./graphviz-src/cmd/dot/dot_static dot-${{matrix.platform}}
+      - name: Smoke tests
+        run: |
+          ./dot-${{matrix.platform}} -V
+          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -Tpng > hello.png
+          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -jpeg > hello.jpeg
+          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -Tsvg > hello.svg
+          echo "digraph G {Hello->World}" | ./dot-${{matrix.platform}} -Tpdf > hello.pdf
       - name: Create release
         run: |
           gh release view "$RELEASE_VERSION" || gh release create "$RELEASE_VERSION"
