@@ -1,6 +1,6 @@
 FROM eclipse-temurin:11.0.18_10-jre-jammy
 
-ARG GRAPHVIZ_VERSION=8.0.4
+ARG GRAPHVIZ_VERSION=9.0.0
 
 RUN apt-get update && apt-get install --no-install-recommends --yes \
     libx11-6 \
