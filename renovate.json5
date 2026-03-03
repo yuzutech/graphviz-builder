@@ -1,0 +1,37 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  dependencyDashboard: true,
+  separateMajorMinor: true,
+  extends: [
+    ':preserveSemverRanges',
+  ],
+  packageRules: [
+    {
+      matchManagers: [
+        'github-actions',
+      ],
+      groupName: 'GitHub Actions',
+    },
+    {
+      matchManagers: [
+        'dockerfile',
+      ],
+      groupName: 'Docker images',
+    },
+    {
+      "customManagers": [
+        {
+          "customType": "regex",
+          "managerFilePatterns": ["/^static.Dockerfile$/"],
+          "matchStrings": [
+            "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?( registryUrl=(?<registryUrl>.*?))?\\s.*?_VERSION=(?<currentValue>.*)\\s"
+          ],
+          "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+        }
+      ]
+    }
+  ],
+  lockFileMaintenance: {
+    enabled: true,
+  },
+}
