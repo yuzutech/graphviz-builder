@@ -18,17 +18,15 @@
       ],
       groupName: 'Docker images',
     },
+  ],
+  "customManagers": [
     {
-      "customManagers": [
-        {
-          "customType": "regex",
-          "managerFilePatterns": ["/^static.Dockerfile$/"],
-          "matchStrings": [
-            "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?( registryUrl=(?<registryUrl>.*?))?\\s.*?_VERSION=(?<currentValue>.*)\\s"
-          ],
-          "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
-        }
-      ]
+      "customType": "regex",
+      "managerFilePatterns": ["/^static.Dockerfile$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?( registryUrl=(?<registryUrl>.*?))?\\s.*?_VERSION=(?<currentValue>.*)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
   lockFileMaintenance: {
